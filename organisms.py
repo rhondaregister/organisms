@@ -18,7 +18,7 @@ class Organism():
 		return self.common_name + ' ' + '({} {})'.format(self.genus, self.species.lower())
 	def __repr__(self):
 		return("<Object: {} ({} {})>").format(self.common_name, self.genus, self.species.lower())
-	def determineCellularUniOrMulti(self):
+	def determineCellular_UniOrMulti(self):
 		if self.domain == 'Bacteria' or self.domain == 'Archaea':
 			return('{} is a unicellular organism.'.format(self))
 		elif self.domain == 'Eukarya':
@@ -79,41 +79,35 @@ class Fungus(MulticellularOrganism):
 #################
 ### Functions ###
 #################
-def sortOrganismsByCells(organism, *args):
-	all_organisms_list = []
+def sortOrganismsByCells(*args):
 	unicellular_organisms = []
 	multicellular_organisms = []
 	aliens = []
-	all_organisms_list.append(organism)
-	for arg in args:
-		all_organisms_list.append(arg)
-	for o in all_organisms_list:
-		if o.domain == 'Bacteria':
-			unicellular_organisms.append(o)
-		elif o.domain == 'Archaea':
+	for o in args:
+		if o.domain == 'Bacteria' or o.domain == 'Archaea':
 			unicellular_organisms.append(o)
 		elif o.domain == 'Eukarya':
 			multicellular_organisms.append(o)
 		else:
 			aliens.append(o)
-	return unicellular_organisms, multicellular_organisms, aliens
+	return unicellular_organisms, multicellular_organisms, aliens 
 
 
 
 fox = Animal('Chordata', 'Mammalia', 'Carnivora', 'Canidae', 'Vulpes', 'Vulpes', 'Red Fox')
 print(fox)
-print(fox.determineCellularUniOrMulti())
+print(fox.determineCellular_UniOrMulti())
 
 e_coli = Bacteria('Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Escherichia', 'Coli', 'E. coli')
 print(e_coli)
-print(e_coli.determineCellularUniOrMulti())
+print(e_coli.determineCellular_UniOrMulti())
 
 c_symbiosum = Archaea('"Proteoarchaeota"', 'Thaumarchaeota', 'incertae sedis', 'Cenarchaeales', 'Cenarchaeaceae', 'Cenarchaeum', 'Symbiosum', 'C. symbiosum')
 print(c_symbiosum)
-print(c_symbiosum.determineCellularUniOrMulti())
+print(c_symbiosum.determineCellular_UniOrMulti())
 
 ET = Alien('Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown', 'ET')
 print(ET)
-print(ET.determineCellularUniOrMulti())
+print(ET.determineCellular_UniOrMulti())
 
 print(sortOrganismsByCells(fox, e_coli, c_symbiosum, ET))
