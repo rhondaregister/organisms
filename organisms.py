@@ -18,25 +18,26 @@ class Organism():
 		return self.common_name + ' ' + '({} {})'.format(self.genus, self.species.lower())
 	def __repr__(self):
 		return("<Object: {} ({} {})>").format(self.common_name, self.genus, self.species.lower())
-	def checkIfMultiCellular(self):
-		if self.domain == 'Eukarya':
-			return('{} is a multicellular organism.'.format(self))
-		else:
-			return('{} is not a multicellular organism.'.format(self))
-	def checkIfUnicellular(self):
-		if self.domain == 'Bacteria':
-			return('{} is a unicellular organism.'.format(self))
-		elif self.domain == 'Archaea':
+	def determineCellularUniOrMulti(self):
+		if self.domain == 'Bacteria' or self.domain == 'Archaea':
 			return('{} is a unicellular organism.'.format(self))
 		elif self.domain == 'Eukarya':
-			return('{} is not a unicellular organism.'.format(self))
+			return('{} is a multicellular organism.'.format(self))
 		else:
-			return('{} is not a unicellular organism.'.format(self))
+			return('{} is not a unicellular or a multicellular organism. You\'ve discovered an alien o_O'.format(self))
 
 
-###############################
+#######################
+### Alien Organisms ###
+#######################
+class Alien(Organism):
+	def __init__(self, *args, **kwargs):
+		super().__init__(self, *args, **kwargs)
+		self.domain = 'Alien'
+
+#############################
 ### Unicellular Organisms ###
-###############################
+#############################
 class Bacteria(Organism):
 	def __init__(self, *args, **kwargs):
 		super().__init__(self, *args, **kwargs)
@@ -49,27 +50,27 @@ class Archaea(Organism):
 
 
 ################################
-### Multi-Cellular Organisms ###
+### Multicellular Organisms ###
 ################################
-class MultiCellularOrganism(Organism):
+class MulticellularOrganism(Organism):
 	def __init__(self, *args, **kwargs):
 		super().__init__(self, *args, **kwargs)
 		self.domain = 'Eukarya'
 
 ### Animals ###
-class Animal(MultiCellularOrganism):
+class Animal(MulticellularOrganism):
 	def __init__(self, *args, **kwargs):
 		super().__init__(self, *args, **kwargs)
 		self.kingdom = 'Animalia'
 
 ### Plants ###
-class Plant(MultiCellularOrganism):
+class Plant(MulticellularOrganism):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.kingdom='Plantae'
 
 ### Fungi ###
-class Fungus(MultiCellularOrganism):
+class Fungus(MulticellularOrganism):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.kingdom='Fungi'
@@ -82,6 +83,7 @@ def sortOrganismsByCells(organism, *args):
 	all_organisms_list = []
 	unicellular_organisms = []
 	multicellular_organisms = []
+	aliens = []
 	all_organisms_list.append(organism)
 	for arg in args:
 		all_organisms_list.append(arg)
@@ -92,25 +94,26 @@ def sortOrganismsByCells(organism, *args):
 			unicellular_organisms.append(o)
 		elif o.domain == 'Eukarya':
 			multicellular_organisms.append(o)
-	return unicellular_organisms, multicellular_organisms
+		else:
+			aliens.append(o)
+	return unicellular_organisms, multicellular_organisms, aliens
 
 
 
 fox = Animal('Chordata', 'Mammalia', 'Carnivora', 'Canidae', 'Vulpes', 'Vulpes', 'Red Fox')
 print(fox)
-print(fox.checkIfUnicellular())
-print(fox.checkIfMultiCellular())
+print(fox.determineCellularUniOrMulti())
 
 e_coli = Bacteria('Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Escherichia', 'Coli', 'E. coli')
 print(e_coli)
-print(e_coli.checkIfUnicellular())
-print(e_coli.checkIfMultiCellular())
-
+print(e_coli.determineCellularUniOrMulti())
 
 c_symbiosum = Archaea('"Proteoarchaeota"', 'Thaumarchaeota', 'incertae sedis', 'Cenarchaeales', 'Cenarchaeaceae', 'Cenarchaeum', 'Symbiosum', 'C. symbiosum')
 print(c_symbiosum)
-print(c_symbiosum.checkIfUnicellular())
-print(c_symbiosum.checkIfMultiCellular())
+print(c_symbiosum.determineCellularUniOrMulti())
 
+ET = Alien('Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown', 'ET')
+print(ET)
+print(ET.determineCellularUniOrMulti())
 
-print(sortOrganismsByCells(fox, e_coli, c_symbiosum))
+print(sortOrganismsByCells(fox, e_coli, c_symbiosum, ET))
